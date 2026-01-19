@@ -11,6 +11,5 @@ const pool = new Pool({
 
 module.exports = pool
 
-// Criar o DB em schema 
 // Criar as rotas que faltam e ajustar o controller e o repository para as rotas privadas
 // criar o auth.js no middleware
