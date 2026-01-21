@@ -20,6 +20,30 @@ class ExpenseController {
 
         return res.status(201).json(newUser)
     }
+
+    async login (req, res) {
+        const { email, password } = req.body
+
+        if (!email) {
+            return res.status(404).json({ error: "Email is required"})
+        }
+
+        const user = await ExpenseRepository.findByEmail(email)
+
+        const passwordMatch = await bcrypt.compare(password, user.password)
+
+        if (!user || !passwordMatch) {
+            return res.status(401).json({ error: "Invalid Credentials"})
+        }
+
+        const token = jwt.sign(
+            { userId: user.id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h'}
+        )
+
+        return res.json(token)
+    }
 }
 
 module.exports = new ExpenseController()
