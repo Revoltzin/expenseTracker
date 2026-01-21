@@ -42,7 +42,7 @@ class ExpenseController {
             { expiresIn: '1h'}
         )
 
-        return res.json(token)
+        return res.json({ token })
     }
 }
 
