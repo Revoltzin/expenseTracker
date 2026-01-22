@@ -48,6 +48,17 @@ class ExpensesRepository {
         const result = await pool.query(query, [title, description, price, is_done, id, userId ])
         return result.rows[0] || null
     }
+
+    async delete (id, user_id) {
+        const query = `
+        DELETE FROM expenses
+        WHERE id = $1 AND user_id = $2
+        RETURNING id
+        `
+
+        const result = await pool.query(query, [id, user_id])
+        return result.rowCount > 0
+    }
 }
 
 module.exports = new ExpensesRepository()
