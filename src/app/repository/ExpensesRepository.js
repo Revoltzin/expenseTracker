@@ -10,6 +10,20 @@ class ExpensesRepository {
         const result = await pool.query(query, [userId, title, description, price])
         return result.rows[0]
     }
+
+    async findAllByUser (userId) {
+        const query = `
+        SELECT id, title, description, price, is_done, created_at
+        FROM expenses
+        WHERE user_id = $1
+        ORDER BY created_at DESC
+        `
+
+        const result = await pool.query(query, [userId])
+        return result.rows
+    }
+
+    
 }
 
 module.exports = new ExpensesRepository()
