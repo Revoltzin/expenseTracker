@@ -41,6 +41,19 @@ class ExpensesController {
 
         return res.json(updated)
     }
+
+    async delete (req, res) {
+        const { id } = req.params
+        const userId = req.user.userId
+
+        const ok = await ExpensesRepository.delete(id, userId)
+
+        if (!ok) {
+            return res.status(404).json({ error: "Expense not Found"})
+        }
+
+        return res.status(204).send()
+    }
 }
 
 module.exports = new ExpensesController()
