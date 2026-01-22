@@ -23,7 +23,31 @@ class ExpensesRepository {
         return result.rows
     }
 
-    
+    async findByIdAndUser (id, userId) {
+        const query = `
+        SELECT * 
+        FROM expenses
+        WHERE id = $1 AND user_id = $2
+        `
+
+        const result = await pool.query(query, [id, userId])
+        return result.rows[0] || null
+    }
+
+    async update ({ id, userId, title, description, price, is_done }) {
+        const query = `
+        UPDATE expenses
+        SET title = $1,
+            description = $2,
+            price = $3
+            is_done = $4
+        WHERE id = $5 AND user_id = $6
+        RETURNING *
+        `
+
+        const result = await pool.query(query, [title, description, price, is_done, id, userId ])
+        return result.rows[0] || null
+    }
 }
 
 module.exports = new ExpensesRepository()
